@@ -9,6 +9,8 @@ def edit_trip(client_id, trip_id):
     cursor.execute("Select created_by from trip where tripid = %s", (trip_id,))
     created_by = cursor.fetchone()
     if not created_by:
+        cursor.close()
+        db.close()
         return jsonify({'error': 'Trip not found'}), 404
     
     if created_by['created_by'] != client_id:

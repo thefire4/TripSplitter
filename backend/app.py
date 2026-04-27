@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
 from routes.login import login_bp
 from routes.landing_page import landing_page_bp
@@ -17,6 +17,7 @@ load_dotenv()
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 CORS(app)
+
 @app.route('/')
 def home():
     return jsonify({'message': 'Welcome to the Trip Planner API',
@@ -36,4 +37,4 @@ app.register_blueprint(deletetrip_bp, url_prefix='/api')
 app.register_blueprint(settlement_bp, url_prefix='/api/settlement')
 app.register_blueprint(deleteexpense_bp, url_prefix='/api')
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

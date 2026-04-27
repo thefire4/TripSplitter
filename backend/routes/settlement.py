@@ -16,6 +16,8 @@ def settle_expenses(trip_id):
         cursor.execute('''SELECT * from expenseparticipants where expenseid = %s''', (expense['expenseid'],))
         participants = cursor.fetchall()
         
+        if not participants:
+            continue
         split_amount = expense['expensePrice'] / len(participants)
         
         balances[expense['paidBy']] = balances.get(expense['paidBy'], 0) + expense['expensePrice']
