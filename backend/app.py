@@ -12,6 +12,8 @@ from routes.edittrip import edittrip_bp
 from routes.deletetrip import deletetrip_bp
 from routes.settlement import settlement_bp
 from routes.deleteexpense import deleteexpense_bp
+from routes.clients import clients_bp
+from routes.friends import friends_bp
 load_dotenv()
 
 app = Flask(__name__)
@@ -23,7 +25,8 @@ def home():
     return jsonify({'message': 'Welcome to the Trip Planner API',
                     "endpoints": ["/api/auth/login","/api/auth/register", "/api/landing_page/<client_id>", "/api/trip_expenses/<client_id>/<trip_id>",
                                   "/api/createtrip", "/api/<client_id>/editexpenses/<trip_id>/<expense_id>", "/api/<client_id>/<trip_id>/addexpense", "/api/<client_id>/edittrip/<trip_id>",
-                                  "/api/<client_id>/deletetrip/<trip_id>", "/api/settlement/<trip_id>", "/api/<client_id>/deleteexpense/<expense_id>"
+                                  "/api/<client_id>/deletetrip/<trip_id>", "/api/settlement/<trip_id>", "/api/<client_id>/deleteexpense/<expense_id>",
+                                  "/api/clients", "/api/<client_id>/friends"
                                   ]}), 200
 app.register_blueprint(login_bp, url_prefix='/api/auth')
 app.register_blueprint(landing_page_bp, url_prefix='/api/landing_page')
@@ -36,5 +39,7 @@ app.register_blueprint(edittrip_bp, url_prefix='/api')
 app.register_blueprint(deletetrip_bp, url_prefix='/api')
 app.register_blueprint(settlement_bp, url_prefix='/api/settlement')
 app.register_blueprint(deleteexpense_bp, url_prefix='/api')
+app.register_blueprint(clients_bp, url_prefix='/api')
+app.register_blueprint(friends_bp, url_prefix='/api')
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

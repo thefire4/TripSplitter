@@ -36,6 +36,13 @@ def settle_expenses(trip_id):
     creditors.sort(key=lambda x: x['amount'], reverse=True)
     debtors.sort(key=lambda x: x['amount'], reverse=True)
 
+    cursor.execute('''SELECT clientid, firstName, lastName FROM client''')
+    clients = cursor.fetchall()
+    client_names = {
+        client['clientid']: f"{client['firstName']} {client['lastName']}"
+        for client in clients
+    }
+
     transactions = []
 
     while creditors and debtors:
@@ -44,7 +51,13 @@ def settle_expenses(trip_id):
 
         amount_to_settle = min(creditor['amount'], debtor['amount'])
         
-        transactions.append({'from': debtor['clientid'], 'to': creditor['clientid'], 'amount': round(amount_to_settle,2)})
+        transactions.append({
+            'from': debtor['clientid'],
+            'fromName': client_names.get(debtor['clientid'], f"Client #{debtor['clientid']}"),
+            'to': creditor['clientid'],
+            'toName': client_names.get(creditor['clientid'], f"Client #{creditor['clientid']}"),
+            'amount': round(amount_to_settle,2)
+        })
 
         creditor['amount'] -= amount_to_settle
         debtor['amount'] -= amount_to_settle
